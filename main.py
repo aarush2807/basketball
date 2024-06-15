@@ -2,7 +2,15 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 def calculate_goat_lab_rating(df, formula):
-    return eval(formula)
+    try:
+        # Evaluate the formula using pandas eval
+        result = pd.eval(formula, local_dict={'df': df})
+        # Normalize the result to keep it under 90
+        normalized_result = (result - result.min()) / (result.max() - result.min()) * 90
+        return normalized_result
+    except Exception as e:
+        print("Error in formula:", e)
+        return pd.Series([0] * len(df))
 
 def plot_top_players_bar(df, x_col, y_col, title, color):
     bars = plt.bar(df[x_col], df[y_col], color=color)
@@ -15,7 +23,7 @@ def plot_top_players_bar(df, x_col, y_col, title, color):
     # Add value labels on top of the bars
     for bar in bars:
         height = bar.get_height()
-        plt.annotate('{}'.format(round(height, 3)), 
+        plt.annotate('{}'.format(round(height, 2)), 
                      xy=(bar.get_x() + bar.get_width() / 2, height), 
                      xytext=(0, 3),  # 3 points vertical offset
                      textcoords="offset points",
@@ -23,19 +31,28 @@ def plot_top_players_bar(df, x_col, y_col, title, color):
 
 def print_top_players(df, columns):
     rounded_df = df.copy()
-    rounded_df[columns] = rounded_df[columns].round(3)
+    rounded_df[columns] = rounded_df[columns].round(2)
     print(rounded_df[['Player'] + columns])
 
 # Read the CSV file
-df = pd.read_csv('real stats - nba2021_advanced.csv')
+try:
+    df = pd.read_csv('real stats - nba2021_advanced.csv')
+except FileNotFoundError:
+    print("CSV file not found. Please ensure the file 'real stats - nba2021_advanced.csv' is in the directory.")
+    exit()
+
+# Ensure relevant columns are numeric and handle non-numeric values
+numeric_columns = ['PTS', 'OWS', 'DWS', 'MP', 'WS/48', 'AST%', 'TRB%', 'STL%', 'BLK%', 'TOV%', 'PER', 'TS%']
+for col in numeric_columns:
+    df[col] = pd.to_numeric(df[col], errors='coerce')
 
 # Filter players with a minimum points requirement
-df = df[df['PTS'] >= 15]
+df = df[df['PTS'] >= 15].dropna(subset=numeric_columns)
 
 # Example GOAT LAB formulas with descriptions
 formulas = {
     "1": {
-        "formula": "((48 * (df['OWS'] + df['DWS']) / (df['MP'] / 5))) * (df['WS/48']) + 0.5 * ((48 * (df['OWS'] + df['DWS']) / (df['MP'] / 5))) * (df['PTS'] + df['TRB%'] + df['AST%'] + df['STL%'] + df['BLK%'] + df['TOV%'])",
+        "formula": "((48 * (df['OWS'] + df['DWS']) / (df['MP'] / 5))) * df['WS/48'] + 0.5 * ((48 * (df['OWS'] + df['DWS']) / (df['MP'] / 5))) * (df['PTS'] + df['TRB%'] + df['AST%'] + df['STL%'] + df['BLK%'] + df['TOV%'])",
         "description": "Advanced stats based on Win Shares and player percentages."
     },
     "2": {
@@ -55,7 +72,7 @@ for key, value in formulas.items():
 print("4: Create your own")
 
 # User input for GOAT LAB formula
-choice = input("Enter the number of your choice: ")
+choice = input("Enter the number of your choice: ").strip()
 
 if choice in formulas:
     formula = formulas[choice]["formula"]
@@ -67,6 +84,7 @@ else:
 
 # Calculate GOAT LAB rating
 df['GOAT_LAB'] = calculate_goat_lab_rating(df, formula)
+df['GOAT_LAB'] = df['GOAT_LAB'].clip(upper=90)  # Clip values to ensure they do not exceed 90
 df = df.sort_values(by='GOAT_LAB', ascending=False)
 top_players_goat_lab = df.head(10)
 
@@ -75,7 +93,7 @@ print("\nTop 10 NBA Players - GOAT LAB Rating:")
 print_top_players(top_players_goat_lab, ['GOAT_LAB'])
 
 # Ask user if they want to view specific stats
-view_stats = input("\nWould you like to view specific individual statistics? (yes/no): ").lower()
+view_stats = input("\nWould you like to view specific individual statistics? (yes/no): ").strip().lower()
 
 if view_stats == 'yes':
     # User input for which stats to display
