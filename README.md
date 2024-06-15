@@ -69,7 +69,8 @@ Top 10 NBA Players - AST%:
 ...         ...   ...
 
 ```
-
+## 
+All data/stats are from https://www.basketball-reference.com/ and do not belong to me. 
 ## License
 
 This project is dedicated to the public domain under the CC0 1.0 Universal (CC0 1.0) Public Domain Dedication.
