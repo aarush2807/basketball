@@ -47,7 +47,7 @@ for col in numeric_columns:
     df[col] = pd.to_numeric(df[col], errors='coerce')
 
 # Filter players with a minimum points requirement
-df = df[df['PTS'] >= 15].dropna(subset=numeric_columns)
+df = df[df['MP'] > 20].dropna(subset=numeric_columns)
 
 # Example GOAT LAB formulas with descriptions
 formulas = {
