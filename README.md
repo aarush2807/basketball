@@ -86,7 +86,3 @@ The GOAT Lab uses a normalized score to compare players. After applying your cho
 
 Got an idea for a new feature or found a bug? Open an issue or submit a pull request. Contributions of all kinds are welcome!
 
----
-
-Would you like me to also make this **GitHub README-ready** (with badges, table of contents, and code formatting polish) so it looks professional for a repo?
-
