@@ -1,80 +1,59 @@
-# NBA GOAT LAB Rating
+NBA Analysis & Trade Simulator
+A command-line tool for basketball fans and aspiring GMs. Dive deep into player stats with the "GOAT Lab" to create your own rankings, or fire up the Trade Simulator to build and evaluate blockbuster trades. This script is built with Python and uses the Pandas library for data crunching and Matplotlib for visualization.
 
-This Python program analyzes NBA player statistics from a dataset and calculates a GOAT LAB rating based on user-defined formulas. It allows users to visualize top players based on their GOAT LAB rating and optionally explore specific individual statistics.
+Features
+GOAT Lab Player Rater:
 
-## Features
+Rank players using one of three preset formulas focused on efficiency, offense, or defense.
 
-- **GOAT LAB Rating Calculation:** Computes a GOAT LAB rating for NBA players using different formulas that combine advanced statistics.
-- **Top Players Display:** Displays the top 10 NBA players based on their GOAT LAB rating.
-- **Custom Formula Support:** Allows users to choose from predefined GOAT LAB formulas or input their own using specific syntax.
-- **Visualization Options:** Offers visualizations of top players' GOAT LAB ratings and optionally selected individual statistics using bar charts.
+Get creative and build your own custom formula using any stat in the dataset.
 
-## Requirements
+Instantly visualize the top 10 players for any formula with a clean bar chart.
 
-- Python 3.x
-- Pandas
-- Matplotlib
+NBA Trade Simulator:
 
-## Usage
+Simulate a trade between any two teams in your dataset.
 
-1. **Setup:**
-   - Ensure Python and necessary libraries (Pandas, Matplotlib) are installed.
-   - Place your NBA dataset CSV file (`real stats - nba2021_advanced.csv`) in the same directory.
+Interactively build trade packages player by player.
 
-2. **Running the Program:**
-   - Run the `main.py` script.
-   - Follow the prompts to select a GOAT LAB formula or create a custom one using DataFrame column names.
-   - View the top 10 NBA players ranked by their GOAT LAB rating.
+The tool automatically evaluates if the trade is fair based on a custom "Player Impact & Potential (PIP)" score.
 
-3. **Optional Statistical Exploration:**
-   - Choose to view specific individual statistics for the top players.
-   - Select from available statistics like Points (PTS), Assist Percentage (AST%), True Shooting Percentage (TS%), etc.
-   - Visualize the GOAT LAB ratings along with selected statistics in separate bar charts.
+If a trade is accepted, you can see the newly formed rosters for both teams.
 
-## Example
+How To Run
+Getting this tool running is simple. You just need Python, a few common libraries, and a CSV file with NBA stats.
 
-Here’s an example of the program's output:
+1. Prerequisites
+Make sure you have Python 3 installed. You'll also need the following libraries:
 
-```bash
-Choose a GOAT LAB formula or create your own:
-1: Advanced stats based on Win Shares and player percentages.
-2: Player Efficiency Rating (PER) multiplied by True Shooting Percentage (TS%) adjusted by Win Shares.
-3: Basic formula based on points, assists, rebounds, and turnovers.
-4: Create your own
-Enter the number of your choice: 1
+pip install pandas matplotlib numpy
 
-Top 10 NBA Players - GOAT LAB Rating:
-             Player  GOAT_LAB
-10      Joel Embiid    22.503
-5      Nikola Jokic    21.809
-...               ...       ...
+2. Get The Data
+This script is designed to work with advanced player stats from any season.
 
-Would you like to view specific individual statistics? (yes/no): yes
-Available statistics to display: ['PTS', 'AST%', 'TRB%', 'STL%', 'BLK%', 'FG%', '3P%', 'FT%', 'PER', 'TS%']
-Enter the statistics you want to see one by one (type 'done' when finished):
-Enter a statistic: PTS
-Enter a statistic: AST%
-Enter a statistic: done
+Download the advanced stats for a season from a site like Basketball-Reference.com.
 
-Top 10 NBA Players - PTS:
-         Player     PTS
-10  Joel Embiid  28.500
-5   Nikola Jokic  26.400
-...         ...     ...
+Export the data as a CSV file.
 
-Top 10 NBA Players - AST%:
-         Player  AST%
-7   Chris Paul   41.5
-12  Luka Doncic  38.9
-...         ...   ...
+Save the file in the same directory as the script and name it nba2021_advanced.csv.
 
-```
-## 
-All data/stats are from https://www.basketball-reference.com/ and do not belong to me. 
-## License
+Required Columns: Your CSV must contain the following columns for the script to work correctly: Player, Tm, Age, G, MP, PTS, PER, TS%, WS, AST%, TOV%, STL%, BLK%, OWS, DWS, and Pos.
 
-This project is dedicated to the public domain under the CC0 1.0 Universal (CC0 1.0) Public Domain Dedication.
+3. Launch the App
+Open your terminal or command prompt, navigate to the project directory, and run:
 
----
+python your_script_name.py
 
-This README now includes the CC0 license information, ensuring that the project is explicitly dedicated to the public domain.
+(Replace your_script_name.py with the actual name of your Python file.)
+
+From there, the on-screen menus will guide you through the rest!
+
+How It Works
+The tool is built around two key custom metrics:
+
+Player Impact & Potential (PIP) Score: This is the engine behind the Trade Simulator. It calculates a single "value" for each player by combining their on-court production (Win Shares, Points) and efficiency (PER, TS%) with an age-based modifier. Younger players in their prime get a slight boost, while veterans see a slight decrease, simulating how a real front office might value players.
+
+GOAT LAB Rating: This is a normalized score used in the player rater. After calculating a player's score from a given formula, the script scales all results to a 0-90 range. This makes it easy to compare players, even if you are using wildly different custom formulas.
+
+Contributing
+Have an idea for a new feature or found a bug? Feel free to open an issue or submit a pull request. All contributions are welcome!
